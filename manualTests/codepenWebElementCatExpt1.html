@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    img {
+      border: 10px;
+      border-style: solid;
+      border-color: red;
+      height: 60px;
+    }
+
+    div {
+      color: lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <h1> Codepen : https://codepen.io/cornerkitten/pen/YVJwdw</h1>
+  <div id="baby">This is the baby cat:</div>
+  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/928004/cornerkitten-avatar-rainbow.png" alt="baby cat">
+
+  <div id="momma">This is the shaddow momma cat: </div>
+  <corner-kitten></corner-kitten>
+  <script>
+    class CornerKittenElement extends HTMLElement {
+      constructor() {
+        super();
+
+        const image = document.createElement('img');
+        image.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/928004/cornerkitten-avatar-rainbow.png';
+        image.style.maxHeight = "90vh";
+        image.style.maxWidth = "90vw";
+
+        const divPM = document.createElement('div');
+        divPM.classList.add('pm');
+        divPM.innerHTML = "I have changed!";
+        divPM.style.backgroundColor = 'blue';
+
+
+        var myMomma = this.attachShadow({ mode: 'open' })
+
+        myMomma.appendChild(image);
+        myMomma.appendChild(divPM);
+      }
+    }
+
+    customElements.define('corner-kitten', CornerKittenElement);
+
+  </script>
+</body>
+
+</html>

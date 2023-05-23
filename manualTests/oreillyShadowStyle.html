@@ -1,0 +1,22 @@
+<head>
+    <style>
+        p {
+            color: blue;
+        }
+    </style>
+    <template><p>I am the default color, then green.</p></template>
+</head>
+<body>
+    <p>I am blue.</p>
+    <div id="host"></div>
+    <p>I am blue.</p>
+    <script type="text/javascript">
+        var template = document.querySelector('template');
+        var root = document.querySelector('#host').attachShadow({mode:'open'});
+
+        root.appendChild(template.content);
+        setTimeout(function () {
+            root.innerHTML += '<style>p { color: green; }</style>';
+        }, 2000)
+    </script>
+</body>

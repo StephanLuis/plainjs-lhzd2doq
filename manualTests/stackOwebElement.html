@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h2 {
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        div {background-color: red;}
+        
+        #nameTag {
+            border: 1px dashed blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>WebElement https://stackoverflow.com/a/55655556/2455159 </h2>
+    <div id="nameTag"></div>
+    <template id="nameTagTemplate">
+        <div class="outer">
+            <div class="name">
+                <slot></slot>
+            </div>
+        </div>
+    </template>
+    <script>
+        let shadow = document.querySelector('#nameTag').attachShadow({ mode: 'open' });
+
+        let content_area = document.querySelector("#nameTag");
+        content_area.innerHTML = 'I show in the slot';
+        content_area.style.backgroundColor = 'blue';
+
+        let template = document.querySelector('#nameTagTemplate');
+        shadow.appendChild(template.content.cloneNode(true));
+
+    </script>
+</body>
+
+</html>
