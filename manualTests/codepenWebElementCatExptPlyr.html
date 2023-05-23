@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    img {
+      border: 10px;
+      border-style: solid;
+      border-color: red;
+      height: 60px;
+    }
+
+    div {
+      color: lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <h1> Codepen : https://codepen.io/cornerkitten/pen/YVJwdw</h1>
+  <div id="baby">This is the baby cat:</div>
+  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/928004/cornerkitten-avatar-rainbow.png" alt="baby cat">
+
+  <div id="momma">This is the shaddow momma cat: </div>
+  <corner-kitten></corner-kitten>
+  <div id="Vplayer" class="pm" data-plyr-provider="vimeo" data-plyr-embed-id="76979871"></div>
+
+  <script>
+    class CornerKittenElement extends HTMLElement {
+      constructor() {
+        super();
+
+        const image = document.createElement('img');
+        image.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/928004/cornerkitten-avatar-rainbow.png';
+        image.style.maxHeight = "90vh";
+        image.style.maxWidth = "90vw";
+
+        const divPM = document.createElement('div');
+        divPM.classList.add('pm');
+        divPM.innerHTML = "I have changed!";
+        divPM.style.backgroundColor = 'blue';
+
+        // add plyr div
+        //  <div id="Vplayer" class="pm" data-plyr-provider="vimeo" data-plyr-embed-id="76979871"></div>
+
+        const plyrDiv = document.createElement('div');
+        plyrDiv.id = 'Vplayer';
+        plyrDiv.setAttribute('data-plyr-provider', 'vimeo');
+        plyrDiv.setAttribute('data-plyr-embed-id', '76979871');
+
+
+        const plyrCssLink = document.createElement('link');
+        let link = document.createElement('link');
+        plyrCssLink.setAttribute('rel', 'stylesheet');
+        plyrCssLink.setAttribute('href', 'https://cdn.plyr.io/3.7.8/plyr.css');
+       // this.shadowRoot.appendChild(link);
+
+        var myMomma = this.attachShadow({ mode: 'open' })
+
+        myMomma.appendChild(image);
+        myMomma.appendChild(divPM);
+        myMomma.appendChild(plyrDiv);
+        myMomma.appendChild(plyrCssLink);
+      }
+    }
+
+    customElements.define('corner-kitten', CornerKittenElement);
+
+  </script>
+  <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
+</body>
+
+</html>
