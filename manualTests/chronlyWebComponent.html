@@ -15,6 +15,40 @@
             constructor() {
                 super();
 
+                this.checkBoot();
+
+
+
+
+                /**
+                 * this prevents non-numerics from being entered, should 
+                 * be put into a method
+                 */
+
+                document.querySelectorAll(".timeCase input").forEach(item =>
+
+                    item.addEventListener('keypress', function (e) {
+
+                        e = e || window.event;
+                        var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                        var charStr = String.fromCharCode(charCode);
+
+                        if (!charStr.match(/^[0-9]+$/))
+                            e.preventDefault();
+
+                    }));
+
+                // run checkboot again (why??)
+                this.checkBoot()
+
+
+
+
+
+
+
+
+                // old WC
 
                 var spanIn = document.createElement("div");
 
@@ -55,8 +89,65 @@
                 myElement.appendChild(chronlyCssLink);
 
 
+            }  // end constructor
+
+
+                            /**
+                 * each time Chronly is newed up, the constructor uses checkBoot() to
+                 * 1) check for an existing window.ChronlyFlag if there is one 
+                 * 2) clear events a) named events, b) remove 
+                 * 3) add events
+                 * @method 
+                 */
+
+            checkBoot() {
+
+                if (window.ChronlyFlag) {
+                    this.reboot();
+                }
+                else {
+                    this.boot();
+                }
             }
-        }
+
+
+
+            /**
+            * used by checkBoot() and externally exposed for user
+            * @method
+            * 
+            */
+
+            boot() {
+
+                this.addHTML();
+
+                // set up event listeners
+                this.add0s();
+                this.addNumberLooping();
+                this.addArrowKeyInput();
+                this.addNumericInput();
+                this.addClicksToActivate();
+                this.nonNumericBugInHTML();
+                this.updateDivPrototype();
+
+
+                /**
+                 * window.ChronlyFlag declared here
+                 * @global  
+                 */
+                window.ChronlyFlag = true;
+            }
+
+
+
+
+
+        }  // end class
+
+
+
+        // page script (try making this auto instantiate in module like PM does)
 
         customElements.define('chronly-input', ChronlyInputElement);
 
