@@ -9,20 +9,18 @@
 </head>
 
 <body>
-    <chronly-hms id="Bob"></chronly-hms>
-    <chronly-hms id="Jane"></chronly-hms>
-    <input type="date" id="BobsDate"></input>
-    <p id="what">This is for testing HTMLelement prototype update</p>
+    
+    <input is="chronly-input" id ="Bob"></input>
+    <input id="Jane" type="time"></input>
+    
     <script>
-        class ChronlyHMSElement extends HTMLElement {
+        class ChronlyInputElement extends HTMLInputElement  {
             constructor() {
                 super();
 
-                this.myElement = this.attachShadow({ mode: 'open' });
+             //   this.myElement = this.attachShadow({ mode: 'open' });
 
                 this.checkBoot();
-
-
 
 
 
@@ -59,6 +57,7 @@
             addHTML() {
 
                 var spanIn = document.createElement("div");
+                spanIn.style.color = 'red';
 
                 spanIn.classList.add('timeCase');
 
@@ -92,9 +91,9 @@
 
 
 
-                this.myElement.appendChild(spanIn);
+                this.appendChild(spanIn);
 
-                this.myElement.appendChild(chronlyCssLink);
+                this.appendChild(chronlyCssLink);
 
 
 
@@ -145,9 +144,9 @@
                 // this.addNumberLooping();
                 // this.addArrowKeyInput();
                 // this.addNumericInput();
-                 this.addClicksToActivate();
+                // this.addClicksToActivate();
                 // this.nonNumericBugInHTML();
-                this.updatePrototype();
+                // this.updateDivPrototype();
 
 
                 /**
@@ -207,72 +206,12 @@
             }
 
 
-            // second idea is to update prototype of ChronlyInputElement (class)
-
-            updatePrototype() {
-
-                ChronlyHMSElement.prototype.__defineGetter__('value', function () {
-
-                    if (this.myElement.querySelector('input[name="startHours"]') !== null) {
-
-                        return this.myElement.querySelector('input[name="startHours"]').value +
-                            ':' + this.myElement.querySelector('input[name="startMinutes"]').value +
-                            ':' + this.myElement.querySelector('input[name="startSeconds"]').value +
-                            '.' + this.myElement.querySelector('input[name="startMilliSecs"]').value;
-
-                    }
-                    else {
-
-                        return null;
-
-                    }
-                });
-
-
-
-                ChronlyHMSElement.prototype.__defineSetter__('value', function (timeString) {
-
-                    // will need warning about timeString format (like input type='time')
-
-                    if (/(^[0-9][0-9]):([0-5][0-9]):([0-5][0-9])\.([0-9][0-9][0-9]$)/.exec(timeString)) {
-
-                        // split val
-
-                        var timeArray = timeString.split(/[.:]+/);
-
-                        this.myElement.querySelector('input[name="startHours"]').value = timeArray[0];
-                        this.myElement.querySelector('input[name="startMinutes"]').value = timeArray[1];
-                        this.myElement.querySelector('input[name="startSeconds"]').value = timeArray[2];
-                        this.myElement.querySelector('input[name="startMilliSecs"]').value = timeArray[3];
-
-                    }
-                    else {
-
-                        console.warn(`The specified value ${timeString} does not conform to the required format.  The format is "HH:mm:ss.SSS" where HH is 00-99, mm is 00-59, ss is 00-59, and SSS is 000-999.`);
-
-                    }
-
-                });
-            }
-
-            /**
-             * eventlistener that adds click to activate input of values by the keyboard triggered by
-             * the click event of the input 
-             * @method
-             * @see boot()
-             */
-
-            addClicksToActivate() {
-             
-               this.myElement.querySelectorAll('input').forEach(i => i.addEventListener("click", function () { this.select(); }))
-            }
-
         }  // end class
 
 
         // page script (try making this auto instantiate in module like PM does)
 
-        customElements.define('chronly-hms', ChronlyHMSElement);
+        customElements.define('chronly-input', ChronlyInputElement, {extends:'input'});
 
     </script>
 </body>
