@@ -50,6 +50,83 @@
 
             }  // end constructor
 
+
+            /**
+             * eventlistener that adds arrow key input of values (up/down) and place toggling (left/right) triggered by
+             * the change event of the input 
+             * @method
+             * @see boot()
+             */
+
+            addArrowKeyInput() {
+
+
+                console.log('1 this: ' + this);
+                        console.log('1 this.myElement: ' + this.myElement);
+                        console.log('1 this.myElement active: ' + this.myElement);
+
+                        var mE = this.myElement;
+
+                // Left and Right arrow key toggle between HMSmS
+                // this depends on data-attributes ex. data-tp="1" in HTML
+
+                this.myElement.querySelector("div.timeCase")
+                    .addEventListener('keydown', function (event) {
+
+                        console.log('2 this: ' + this);
+                        console.log('data-tp on active element before keydown: ' + mE.activeElement.dataset.tp)
+                        var x = this;
+                        var et = event.target;
+                        var tp_active = x.myElement.shadowRoot.activeElement.tp;
+                        var sR = x.myElement;
+
+                        switch (true) {
+
+                            case event.key == "ArrowLeft":
+
+                                if (tp_active >= 2) {
+                                    tp_active--;
+                                }
+
+                                sR.querySelector("[data-tp='" + tp_active + "']").focus();
+                                setTimeout(function () { sR.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
+
+                                break;
+
+                            case event.key == "ArrowRight":
+                                tp_active = this.myElement.shadowRoot.activeElement.dataset.tp;
+
+                                if (tp_active <= 3) {
+                                    tp_active++;
+                                }
+
+                                this.myElement.shadowRoot.querySelector("[data-tp='" + tp_active + "']").focus();
+                                setTimeout(function () { this.myElement.shadowRoot.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
+                                el_disp.innerHTML = event.key;
+
+                                break;
+
+                            // these keep the input selected
+                            case event.key == "ArrowUp":
+                                setTimeout(function () { this.myElement.shadowRoot.activeElement.select(); }, 5);
+
+                                break;
+
+                            case event.key == "ArrowDown":
+
+                                setTimeout(function () { this.myElement.shadowRoot.activeElement.select(); }, 5);
+
+                                break;
+
+                            // this is good for testing, to determine whether a key press is detected
+                            case /^([0-9]?)$/.test(event.key):
+
+                                break;
+
+                        }
+                    });
+            }
+
             /**
              * used by boot() to update inputs marked with data-univHMS
              * @method
@@ -96,26 +173,86 @@
 
                 this.myElement.appendChild(chronlyCssLink);
 
-
-
-
             }
 
 
+            /**
+             * eventlistener that adds number looping for up and down keys triggered by
+             * the change event of the input 
+             * @method
+             * @see boot()
+             */
+
+            addNumberLooping() {
+
+                // Numeric Value looping (eventually this can be 'parameterised' refactored)
+                // ex. 99 uparrow to 0 hours, 59 uparrow to 0 minutes and seconds, 990 uparrow to 010, downarrow 000 milliseconds
+
+                this.myElement.querySelectorAll("input.sH").forEach(i =>
+                    i.addEventListener('change', function (event) {
+
+                        if (i.value == 100) {
+                            i.value = '00';
+                        }
+                        if (i.value == -1) {
+                            i.value = 99;
+                        }
+
+                    }));
 
 
+                this.myElement.querySelectorAll("input.sM").forEach(i =>
+                    i.addEventListener('change', function (event) {
+
+                        if (i.value == 60) {
+                            i.value = '00';
+                        }
+                        if (i.value == -1) {
+                            i.value = 59;
+                        }
+
+                    }));
 
 
+                this.myElement.querySelectorAll("input.sS").forEach(i =>
+                    i.addEventListener('change', function (event) {
 
+                        if (i.value == 60) {
+                            i.value = '00';
+                        }
+
+                        if (i.value == -1) {
+                            i.value = 59;
+                        }
+
+                    }));
+
+
+                this.myElement.querySelectorAll("input.sMS").forEach(i =>
+                    i.addEventListener('change', function (event) {
+
+                        if (i.value == 1000) {
+                            i.value = "010";
+                        }
+
+                        if (i.value == -10) {
+                            i.value = 990;
+                        }
+
+                        if (i.value == 0) {
+                        }
+
+                    }));
+            }
 
 
             /**
- * each time Chronly is newed up, the constructor uses checkBoot() to
- * 1) check for an existing window.ChronlyFlag if there is one 
- * 2) clear events a) named events, b) remove 
- * 3) add events
- * @method 
- */
+             * each time Chronly is newed up, the constructor uses checkBoot() to
+             * 1) check for an existing window.ChronlyFlag if there is one 
+             * 2) clear events a) named events, b) remove 
+             * 3) add events
+             * @method 
+             */
 
             checkBoot() {
 
@@ -141,11 +278,11 @@
                 this.blockNonNumberInput();
 
                 // // set up event listeners
-                // this.add0s();
-                // this.addNumberLooping();
-                // this.addArrowKeyInput();
+                this.add0s();
+                this.addNumberLooping();
+                this.addArrowKeyInput();
                 // this.addNumericInput();
-                 this.addClicksToActivate();
+                this.addClicksToActivate();
                 // this.nonNumericBugInHTML();
                 this.updatePrototype();
 
@@ -156,6 +293,37 @@
                  */
                 window.ChronlyFlag = true;
             }
+
+
+            /**
+             * eventlistener that adds 0s to preface numbers less than 10 triggered by
+             * the change event of the input 
+             * @method
+             * @see boot()
+             */
+
+            add0s() {
+
+                // input for hours, minutes, seconds
+                this.myElement.querySelectorAll('input').forEach(i => i.addEventListener('change', function () {
+                    if (!isNaN(this.value) && this.value.length === 1) {
+                        this.value = '0' + this.value;
+                    }
+                }));
+
+                // milliseconds
+                this.myElement.querySelectorAll("input.sMS").forEach(i => i.addEventListener('change', function () {
+
+                    if (!isNaN(this.value) && this.value.length === 2) {
+                        this.value = '0' + this.value;
+                    }
+
+                }));
+
+            }
+
+
+
 
 
             /**
@@ -189,6 +357,8 @@
 
             }
 
+
+            // this needs to be updated or removed, test
 
             blockNonNumberInput() {
 
@@ -263,8 +433,8 @@
              */
 
             addClicksToActivate() {
-             
-               this.myElement.querySelectorAll('input').forEach(i => i.addEventListener("click", function () { this.select(); }))
+
+                this.myElement.querySelectorAll('input').forEach(i => i.addEventListener("click", function () { this.select(); }))
             }
 
         }  // end class
