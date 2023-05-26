@@ -11,6 +11,7 @@
 <body>
     <chronly-hms id="Bob"></chronly-hms>
     <chronly-hms id="Jane"></chronly-hms>
+    <!-- <chronly-hms id="Jane"></chronly-hms> -->
     <input type="date" id="BobsDate"></input>
     <p id="what">This is for testing HTMLelement prototype update</p>
     <script>
@@ -21,10 +22,6 @@
                 this.myElement = this.attachShadow({ mode: 'open' });
 
                 this.checkBoot();
-
-
-
-
 
 
                 /**
@@ -241,13 +238,21 @@
 
             addNumericInput() {
 
+                const mE = this.myElement;
+
                 // https://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
                 // Digit input 0-9  (typed in by user)
 
                 function setInputFilter(inputElement, inputFilter) {
                     // this sets a listener and  immediately updates the value of the input number (note: can update this from input text, like by removing setSelectionRange )
 
-                    inputElement.addEventListener('keyup', function () {
+                    console.log('inputElement: ' + inputElement);
+                    window.inputElement = inputElement;
+
+                    inputElement.addEventListener('keyup', function (event) {
+
+                        window.kue = event;
+
                         if (/^([0-9]?)$/.test(event.key)) {
                             if (inputFilter(this.value)) {
                                 this.oldValue = this.value;
@@ -267,22 +272,17 @@
                 // three boxes, hours or minutes and seconds (are the same) but milliseconds is different
 
                 // sH
-                const sH = this.myElement.querySelector('input.sH');
-                window.what = sH;
+                var sH = this.myElement.querySelector('input.sH');
 
                 setInputFilter(sH, function (value) {
 
                     var newV = /^([0-9]?|[0-9][0-9]?)$/.test(value);
 
 
-
-
                     if (value.length === 2) {
 
-                        window.chronME = this.myElement;
-
-                        this.myElement.parentNode.querySelector('input.sM').focus();
-                        this.myElement.parentNode.querySelector('input.sM').select();
+                        mE.querySelector('input.sM').focus();
+                        mE.querySelector('input.sM').select();
 
                     }
 
@@ -290,52 +290,55 @@
 
                 });
 
-                document.querySelectorAll('input.sM').forEach(i => setInputFilter(i, function (value) {
+                var sM = this.myElement.querySelector('input.sM');
+                setInputFilter(sM, function (value) {
 
 
                     var newV = /^([0-9]?|[0-5][0-9]?)$/.test(value);
 
                     if (value > 5 || value.length === 2) {
 
-                        i.parentNode.querySelector('input.sS').focus();
-                        i.parentNode.querySelector('input.sS').select();
+                        mE.querySelector('input.sS').focus();
+                        mE.querySelector('input.sS').select();
 
                     }
 
                     return newV;
 
-                }));
+                });
 
-                document.querySelectorAll('input.sS').forEach(i => setInputFilter(i, function (value) {
+                var sS = this.myElement.querySelector('input.sS');
+                setInputFilter(sS, function (value) {
 
                     var newV = /^([0-9]?|[0-5][0-9]?)$/.test(value);
 
                     if (value > 5 || value.length === 2) {
 
-                        i.parentNode.querySelector('input.sMS').focus();
-                        i.parentNode.querySelector('input.sMS').select();
+                        mE.querySelector('input.sMS').focus();
+                        mE.querySelector('input.sMS').select();
 
                     }
 
                     return newV;
 
-                }));
+                });
 
 
-                document.querySelectorAll('input.sMS').forEach(i => setInputFilter(i, function (value) {
+                var sMS = this.myElement.querySelector('input.sMS');
+                setInputFilter(sMS, function (value) {
 
                     var newV = /^([0-9]?|[0-9][0-9]?|[0-9][0-9][0-9]?)$/.test(value);
 
 
                     if (value.length === 3) {
 
-                        i.parentNode.querySelector('input.sMS').blur();
+                        mE.querySelector('input.sMS').blur();
 
                     }
 
                     return newV;
 
-                }));
+                });
 
             }
 
