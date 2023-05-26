@@ -380,7 +380,7 @@
                 this.addArrowKeyInput();
                 this.addNumericInput();
                 this.addClicksToActivate();
-                // this.nonNumericBugInHTML();
+                this.nonNumericBugInHTML();
                 this.updatePrototype();
 
 
@@ -533,6 +533,31 @@
 
                 this.myElement.querySelectorAll('input').forEach(i => i.addEventListener("click", function () { this.select(); }))
             }
+
+            /**
+   * eventlistener that adds key filtering to stop letters (or other non-numerics) from being input triggered by
+   * the keypress event of the input 
+   * @method
+   * @see boot()
+   */
+
+            nonNumericBugInHTML() {
+
+                this.myElement.querySelectorAll(".timeCase input").forEach(item =>
+
+                    item.addEventListener('keypress', function (e) {
+
+                        e = e || window.event;
+                        var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                        var charStr = String.fromCharCode(charCode);
+
+                        if (!charStr.match(/^[0-9]+$/))
+                            e.preventDefault();
+
+                    }));
+
+            }
+
 
         }  // end class
 
