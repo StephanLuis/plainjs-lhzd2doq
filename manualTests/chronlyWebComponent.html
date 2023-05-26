@@ -62,10 +62,10 @@
 
 
                 console.log('1 this: ' + this);
-                        console.log('1 this.myElement: ' + this.myElement);
-                        console.log('1 this.myElement active: ' + this.myElement);
+                console.log('1 this.myElement: ' + this.myElement);
+                console.log('1 this.myElement active: ' + this.myElement);
 
-                        var mE = this.myElement;
+                var mE = this.myElement;
 
                 // Left and Right arrow key toggle between HMSmS
                 // this depends on data-attributes ex. data-tp="1" in HTML
@@ -73,12 +73,8 @@
                 this.myElement.querySelector("div.timeCase")
                     .addEventListener('keydown', function (event) {
 
-                        console.log('2 this: ' + this);
-                        console.log('data-tp on active element before keydown: ' + mE.activeElement.dataset.tp)
-                        var x = this;
                         var et = event.target;
-                        var tp_active = x.myElement.shadowRoot.activeElement.tp;
-                        var sR = x.myElement;
+                        var tp_active = mE.activeElement.dataset.tp;
 
                         switch (true) {
 
@@ -88,33 +84,33 @@
                                     tp_active--;
                                 }
 
-                                sR.querySelector("[data-tp='" + tp_active + "']").focus();
-                                setTimeout(function () { sR.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
+                                et.parentElement.querySelector("[data-tp='" + tp_active + "']").focus();
+                                setTimeout(function () { et.parentElement.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
 
                                 break;
 
                             case event.key == "ArrowRight":
-                                tp_active = this.myElement.shadowRoot.activeElement.dataset.tp;
+                                // tp_active = this.myElement.shadowRoot.activeElement.dataset.tp;
 
                                 if (tp_active <= 3) {
                                     tp_active++;
                                 }
 
-                                this.myElement.shadowRoot.querySelector("[data-tp='" + tp_active + "']").focus();
-                                setTimeout(function () { this.myElement.shadowRoot.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
-                                el_disp.innerHTML = event.key;
+                                et.parentElement.querySelector("[data-tp='" + tp_active + "']").focus();
+                                setTimeout(function () { et.parentElement.querySelector("[data-tp='" + tp_active + "']").select(); }, 5);
 
                                 break;
 
                             // these keep the input selected
                             case event.key == "ArrowUp":
-                                setTimeout(function () { this.myElement.shadowRoot.activeElement.select(); }, 5);
+                                
+                                setTimeout(function () { mE.activeElement.select(); }, 5);
 
                                 break;
 
                             case event.key == "ArrowDown":
 
-                                setTimeout(function () { this.myElement.shadowRoot.activeElement.select(); }, 5);
+                                setTimeout(function () { mE.activeElement.select(); }, 5);
 
                                 break;
 
