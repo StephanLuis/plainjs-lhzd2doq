@@ -103,7 +103,7 @@
 
                             // these keep the input selected
                             case event.key == "ArrowUp":
-                                
+
                                 setTimeout(function () { mE.activeElement.select(); }, 5);
 
                                 break;
@@ -184,61 +184,159 @@
                 // Numeric Value looping (eventually this can be 'parameterised' refactored)
                 // ex. 99 uparrow to 0 hours, 59 uparrow to 0 minutes and seconds, 990 uparrow to 010, downarrow 000 milliseconds
 
-                this.myElement.querySelectorAll("input.sH").forEach(i =>
-                    i.addEventListener('change', function (event) {
+                const sH = this.myElement.querySelector("input.sH");
+                sH.addEventListener('change', function (event) {
 
-                        if (i.value == 100) {
-                            i.value = '00';
+                    if (sH.value == 100) {
+                        sH.value = '00';
+                    }
+                    if (sH.value == -1) {
+                        sH.value = 99;
+                    }
+
+                });
+
+                const sM = this.myElement.querySelector("input.sM");
+                sM.addEventListener('change', function (event) {
+
+                    if (sM.value == 60) {
+                        sM.value = '00';
+                    }
+                    if (sM.value == -1) {
+                        sM.value = 59;
+                    }
+
+                });
+
+                const sS = this.myElement.querySelector("input.sS");
+                sS.addEventListener('change', function (event) {
+
+                    if (sS.value == 60) {
+                        sS.value = '00';
+                    }
+
+                    if (sS.value == -1) {
+                        sS.value = 59;
+                    }
+
+                });
+
+
+                const sMS = this.myElement.querySelector("input.sMS");
+                sMS.addEventListener('change', function (event) {
+
+                    if (sMS.value == 1000) {
+                        sMS.value = "010";
+                    }
+
+                    if (sMS.value == -10) {
+                        sMS.value = 990;
+                    }
+
+                    if (sMS.value == 0) {
+                    }
+
+                });
+            }
+
+            addNumericInput() {
+
+                // https://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
+                // Digit input 0-9  (typed in by user)
+
+                function setInputFilter(inputElement, inputFilter) {
+                    // this sets a listener and  immediately updates the value of the input number (note: can update this from input text, like by removing setSelectionRange )
+
+                    inputElement.addEventListener('keyup', function () {
+                        if (/^([0-9]?)$/.test(event.key)) {
+                            if (inputFilter(this.value)) {
+                                this.oldValue = this.value;
+                                this.oldSelectionStart = this.selectionStart;
+                                this.oldSelectionEnd = this.selectionEnd;
+                            } else if (this.hasOwnProperty("oldValue")) {
+                                this.value = this.oldValue;
+                                // this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                            } else {
+                                this.value = "";
+                            }
                         }
-                        if (i.value == -1) {
-                            i.value = 99;
-                        }
-
-                    }));
+                    });
+                }
 
 
-                this.myElement.querySelectorAll("input.sM").forEach(i =>
-                    i.addEventListener('change', function (event) {
+                // three boxes, hours or minutes and seconds (are the same) but milliseconds is different
 
-                        if (i.value == 60) {
-                            i.value = '00';
-                        }
-                        if (i.value == -1) {
-                            i.value = 59;
-                        }
+                // sH
+                const sH = this.myElement.querySelector('input.sH');
+                window.what = sH;
 
-                    }));
+                setInputFilter(sH, function (value) {
+
+                    var newV = /^([0-9]?|[0-9][0-9]?)$/.test(value);
 
 
-                this.myElement.querySelectorAll("input.sS").forEach(i =>
-                    i.addEventListener('change', function (event) {
-
-                        if (i.value == 60) {
-                            i.value = '00';
-                        }
-
-                        if (i.value == -1) {
-                            i.value = 59;
-                        }
-
-                    }));
 
 
-                this.myElement.querySelectorAll("input.sMS").forEach(i =>
-                    i.addEventListener('change', function (event) {
+                    if (value.length === 2) {
 
-                        if (i.value == 1000) {
-                            i.value = "010";
-                        }
+                        window.chronME = this.myElement;
 
-                        if (i.value == -10) {
-                            i.value = 990;
-                        }
+                        this.myElement.parentNode.querySelector('input.sM').focus();
+                        this.myElement.parentNode.querySelector('input.sM').select();
 
-                        if (i.value == 0) {
-                        }
+                    }
 
-                    }));
+                    return newV;
+
+                });
+
+                document.querySelectorAll('input.sM').forEach(i => setInputFilter(i, function (value) {
+
+
+                    var newV = /^([0-9]?|[0-5][0-9]?)$/.test(value);
+
+                    if (value > 5 || value.length === 2) {
+
+                        i.parentNode.querySelector('input.sS').focus();
+                        i.parentNode.querySelector('input.sS').select();
+
+                    }
+
+                    return newV;
+
+                }));
+
+                document.querySelectorAll('input.sS').forEach(i => setInputFilter(i, function (value) {
+
+                    var newV = /^([0-9]?|[0-5][0-9]?)$/.test(value);
+
+                    if (value > 5 || value.length === 2) {
+
+                        i.parentNode.querySelector('input.sMS').focus();
+                        i.parentNode.querySelector('input.sMS').select();
+
+                    }
+
+                    return newV;
+
+                }));
+
+
+                document.querySelectorAll('input.sMS').forEach(i => setInputFilter(i, function (value) {
+
+                    var newV = /^([0-9]?|[0-9][0-9]?|[0-9][0-9][0-9]?)$/.test(value);
+
+
+                    if (value.length === 3) {
+
+                        i.parentNode.querySelector('input.sMS').blur();
+
+                    }
+
+                    return newV;
+
+                }));
+
             }
 
 
@@ -277,7 +375,7 @@
                 this.add0s();
                 this.addNumberLooping();
                 this.addArrowKeyInput();
-                // this.addNumericInput();
+                this.addNumericInput();
                 this.addClicksToActivate();
                 // this.nonNumericBugInHTML();
                 this.updatePrototype();
