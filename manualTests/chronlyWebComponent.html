@@ -383,6 +383,7 @@
                 this.nonNumericBugInHTML();
                 this.updatePrototype();
 
+                this.exsposeGlobalMethods();
 
                 /**
                  * window.ChronlyFlag declared here
@@ -392,6 +393,19 @@
             }
 
 
+            ///** START HERE
+            // look into document.querySelector('#Bob').disable() syntax
+
+            exsposeGlobalMethods() {
+                window.ChronlyDisableId = function (id) {
+
+                    // disable chronly inputs on page
+
+                    document.querySelector(id).shadowRoot.querySelectorAll(".timeCase input").forEach(el => el.disabled = 'true')
+
+
+                }
+            }
             /**
              * eventlistener that adds 0s to preface numbers less than 10 triggered by
              * the change event of the input 

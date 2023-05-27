@@ -69,3 +69,9 @@
   padding-right: 2px;
   color: black;
   }  
+
+  *:disabled {
+    background-color: grey;
+    color: lightgrey;
+    opacity: .6;
+  }
