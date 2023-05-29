@@ -383,7 +383,6 @@
                 this.nonNumericBugInHTML();
                 this.updatePrototype();
 
-                this.exsposeGlobalMethods();
 
                 /**
                  * window.ChronlyFlag declared here
@@ -393,19 +392,20 @@
             }
 
 
-            ///** START HERE
-            // look into document.querySelector('#Bob').disable() syntax
 
-            exsposeGlobalMethods() {
-                window.ChronlyDisableId = function (id) {
-
-                    // disable chronly inputs on page
-
-                    document.querySelector(id).shadowRoot.querySelectorAll(".timeCase input").forEach(el => el.disabled = 'true')
+            disable() {
 
 
-                }
+                var closure = this;
+
+
+                // disable chronly inputs on page
+
+                closure.shadowRoot.querySelectorAll(".timeCase input").forEach(el => el.disabled = 'true')
+
+
             }
+
             /**
              * eventlistener that adds 0s to preface numbers less than 10 triggered by
              * the change event of the input 
@@ -548,12 +548,34 @@
                 this.myElement.querySelectorAll('input').forEach(i => i.addEventListener("click", function () { this.select(); }))
             }
 
+
+            noHours() {
+
+                var closure = this;
+
+                // hide chronly hours inputs on page
+
+                closure.shadowRoot.querySelectorAll(".timeCase input.sH").forEach(el => el.style.display = 'none');
+
+
+                // hide the hours colon on page
+
+                closure.shadowRoot.querySelectorAll(".timeCase span.bds-h").forEach(el => el.style.display = 'none');
+
+            }
+
+
+
+
+
+
+
             /**
-   * eventlistener that adds key filtering to stop letters (or other non-numerics) from being input triggered by
-   * the keypress event of the input 
-   * @method
-   * @see boot()
-   */
+             * eventlistener that adds key filtering to stop letters (or other non-numerics) from being input triggered by
+             * the keypress event of the input 
+             * @method
+             * @see boot()
+             */
 
             nonNumericBugInHTML() {
 
