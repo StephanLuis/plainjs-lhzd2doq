@@ -10,7 +10,7 @@
 
 <body>
     <chronly-hms id="bob"></chronly-hms>
-    <chronly-hms id="bobPrepop" value="07:07:07.999"></chronly-hms>
+    <chronly-hms id="bobPrepop" value="99:09:09.999"></chronly-hms>
     <chronly-hms id="Jane"></chronly-hms>
     <input type="date" id="BobsDate"></input>
     <p id="what">This is for testing HTMLelement prototype update</p>
@@ -22,30 +22,13 @@
                 this.myElement = this.attachShadow({ mode: 'open' });
 
 
+                // needed for setting inputs when value attribute is added to chronlyHMS 
+                // <chronly-hms id="bobPrepop" value="99:09:09.999"></chronly-hms>
+
                 this.value = this.getAttribute('value');
 
-                this.checkBoot();
 
-
-                /**
-                 * this prevents non-numerics from being entered, should 
-                 * be put into a method
-                 */
-
-
-
-                // run checkboot again (why??)
-                // this.checkBoot()
-
-
-
-
-
-
-
-
-
-                // old WC
+                this.boot();
 
 
             }  // end constructor
@@ -75,10 +58,11 @@
                 if (val) {
 
 
-
                     console.log(val);
 
+
                     if (/(^[0-9][0-9]):([0-5][0-9]):([0-5][0-9])\.([0-9][0-9][0-9]$)/.exec(val)) {
+
 
                         // split val
 
@@ -431,12 +415,15 @@
 
             checkBoot() {
 
-                if (window.ChronlyFlag) {
-                    this.reboot();
-                }
-                else {
-                    this.boot();
-                }
+                this.boot();
+
+
+                // if (window.ChronlyFlag) {
+                //     this.reboot();
+                // }
+                // else {
+                //     this.boot();
+                // }
             }
 
 
@@ -466,7 +453,7 @@
                  * window.ChronlyFlag declared here
                  * @global  
                  */
-                window.ChronlyFlag = true;
+             //   this.ChronlyFlag = true;
             }
 
 
@@ -508,41 +495,6 @@
                     }
 
                 }));
-
-            }
-
-
-
-
-
-            /**
-             * used by checkBoot() and externally exposed for user
-             * @method
-             * @see boot()
-             */
-
-            reboot() {
-
-                // for each input in the timeCase replace it with (the original/ an) input
-
-                var elements = document.querySelectorAll('.timeCase');
-
-                elements.forEach(element => {
-
-                    var replaceElement = document.createElement('input');
-
-                    [...element.attributes].forEach(attr => { replaceElement.setAttribute(attr.nodeName, attr.nodeValue) });
-
-                    element.parentElement.insertBefore(replaceElement, element);
-
-                    element.remove();
-
-                    // removes eventlisters 
-                    element = ''
-
-                });
-
-                this.boot();
 
             }
 
