@@ -10,6 +10,7 @@
 
 <body>
     <chronly-hms id="bob"></chronly-hms>
+    <chronly-hms id="bobPrepop" value="07:07:07.999"></chronly-hms>
     <chronly-hms id="Jane"></chronly-hms>
     <input type="date" id="BobsDate"></input>
     <p id="what">This is for testing HTMLelement prototype update</p>
@@ -19,6 +20,9 @@
                 super();
 
                 this.myElement = this.attachShadow({ mode: 'open' });
+
+
+                this.value = this.getAttribute('value');
 
                 this.checkBoot();
 
@@ -46,6 +50,81 @@
 
             }  // end constructor
 
+            get value() {
+
+                // return this.getAttribute('value');
+
+                if (this.myElement.querySelector('input[name="startHours"]') !== null) {
+
+                    return this.myElement.querySelector('input[name="startHours"]').value +
+                        ':' + this.myElement.querySelector('input[name="startMinutes"]').value +
+                        ':' + this.myElement.querySelector('input[name="startSeconds"]').value +
+                        '.' + this.myElement.querySelector('input[name="startMilliSecs"]').value;
+
+                }
+                else {
+
+                    return null;
+
+                }
+            }
+
+            set value(val) {
+
+                // for setting the value in js (like document.querySelector("#bobPrepop").value = "05:05:05.005")
+                if (val) {
+
+
+
+                    console.log(val);
+
+                    if (/(^[0-9][0-9]):([0-5][0-9]):([0-5][0-9])\.([0-9][0-9][0-9]$)/.exec(val)) {
+
+                        // split val
+
+                        var timeArray = val.split(/[.:]+/);
+
+                        console.log('time array is ' + timeArray[0] + ':' + timeArray[1] + ':' + timeArray[2] + ':' + timeArray[3]);
+
+                        console.log('this.id = ' + this.id);
+
+                        setTimeout(() => {
+
+                            this.myElement.querySelector('input[name="startHours"]').value = timeArray[0];
+                            this.myElement.querySelector('input[name="startMinutes"]').value = timeArray[1];
+                            this.myElement.querySelector('input[name="startSeconds"]').value = timeArray[2];
+                            this.myElement.querySelector('input[name="startMilliSecs"]').value = timeArray[3];
+                        }, 0);
+
+
+
+                        this.setAttribute('value', val);
+
+                    }
+                    else {
+
+                        console.warn(`The specified value ${val} does not conform to the required format.  The format is "HH:mm:ss.SSS" where HH is 00-99, mm is 00-59, ss is 00-59, and SSS is 000-999.`);
+
+                    }
+
+                    //  I think this is for empty string to clear value
+                    // gives a False bool and removes value from Webcomponent chronlyHMS
+                } else {
+
+
+                    setTimeout(() => {
+
+                        this.myElement.querySelector('input[name="startHours"]').value = '00';
+                        this.myElement.querySelector('input[name="startMinutes"]').value = '00';
+                        this.myElement.querySelector('input[name="startSeconds"]').value = '00';
+                        this.myElement.querySelector('input[name="startMilliSecs"]').value = '000';
+
+                    }, 0);
+
+
+                    this.removeAttribute('value');
+                }
+            }
 
             /**
              * eventlistener that adds arrow key input of values (up/down) and place toggling (left/right) triggered by
@@ -380,7 +459,7 @@
                 this.addNumericInput();
                 this.addClicksToActivate();
                 this.nonNumericBugInHTML();
-                this.updatePrototype();
+                // this.updatePrototype();
 
 
                 /**
@@ -490,6 +569,7 @@
             // second idea is to update prototype of ChronlyInputElement (class)
 
             updatePrototype() {
+
 
                 ChronlyHMSElement.prototype.__defineGetter__('value', function () {
 
