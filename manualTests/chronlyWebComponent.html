@@ -14,6 +14,7 @@
     <chronly-hms id="Jane"></chronly-hms>
     <input type="date" id="BobsDate"></input>
     <p id="what">This is for testing HTMLelement prototype update</p>
+    
     <script>
         class ChronlyHMSElement extends HTMLElement {
             constructor() {
@@ -211,22 +212,102 @@
                         <path xmlns="http://www.w3.org/2000/svg" fill="currentColor" d="M393.9 184l22.6-22.6c4.7-4.7 4.7-12.3 0-17l-17-17c-4.7-4.7-12.3-4.7-17 0l-20.7 20.7c-31.1-27.5-70.4-45.9-113.8-50.8V48h28c6.6 0 12-5.4 12-12V12c0-6.6-5.4-12-12-12H172c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12h28v49.4C96.4 109.3 16 197.2 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-44.7-14.1-86.1-38.1-120zM224 464c-88.4 0-160-71.6-160-160s71.6-160 160-160 160 71.6 160 160-71.6 160-160 160zm12-112h-24c-6.6 0-12-5.4-12-12V204c0-6.6 5.4-12 12-12h24c6.6 0 12 5.4 12 12v136c0 6.6-5.4 12-12 12z"/>
                         </svg>
                     </div>
-                                    `
+                    <style>
+    *:focus {
+        outline: none;
+      }
+      
+      
+      div.timeCase{
+        display: inline-flex;
+        flex-direction: row;
+        max-width: 300px;
+        padding: 3px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+      }
+      
+      
+      /* Each input width set and blinking cursor 'caret' removed */
+      div.timeCase input{
+        caret-color: transparent;
+        width: 15px;
+        padding-top:1px;
+      }
+      
+      
+      div.timeCase .D3{
+        width: 25px;
+      }
+      
+      
+      /* Hiding the up and down arrow */
+      /*https://www.w3schools.com/howto/howto_css_hide_arrow_number.asp*/
+      /* Chrome, Safari, Edge, Opera */
+      
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+      
+      
+      /* Firefox */
+      
+      input[type=number] {
+      /* -moz-appearance: textfield; */
+      -moz-appearance: textarea;
+      -webkit-appearance: textarea;
+      }
+      
+      
+      div.timeCase:focus-within {
+      border: 2px solid black;
+      padding: 2px;
+      }
+      
+      
+      .ts_digit {
+        border: none;
+      } 
+      
+       /* between digit span */
+      .bds{
+        padding-bottom: 1px;
+      }
+      
+      #svgContainer {
+      width: 12px;
+      height: 12px;
+      padding-top: 1px;
+      padding-right: 2px;
+      color: black;
+      }  
+    
+      *:disabled {
+        background-color: grey;
+        color: lightgrey;
+        opacity: .6;
+      }
+      </style> `
 
                 spanIn.appendChild(template.content);
 
 
-                const chronlyCssLink = document.createElement('link');
-                let link = document.createElement('link');
-                chronlyCssLink.setAttribute('rel', 'stylesheet');
-                chronlyCssLink.setAttribute('href', 'chronlyWebComponent.css');
+                // const chronlyCssLink = document.createElement('link');
+                // let link = document.createElement('link');
+                // chronlyCssLink.setAttribute('rel', 'stylesheet');
+                // chronlyCssLink.setAttribute('href', 'chronlyWebComponent.css');
 
+
+                
 
 
 
                 this.myElement.appendChild(spanIn);
 
-                this.myElement.appendChild(chronlyCssLink);
+              //  this.myElement.appendChild(chronlyCssLink);
 
             }
 
@@ -437,6 +518,7 @@
             boot() {
 
                 this.addHTML();
+              //  this.addCSS();
                 this.blockNonNumberInput();
 
                 // // set up event listeners
@@ -470,6 +552,17 @@
 
 
             }
+
+            /**
+             * method adds the necessary CSS
+             * @method
+             * @see boot()
+             * /
+             
+             addCSS(){
+
+             }
+
 
             /**
              * eventlistener that adds 0s to preface numbers less than 10 triggered by
