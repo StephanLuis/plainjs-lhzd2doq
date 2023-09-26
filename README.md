@@ -1,5 +1,9 @@
 # Standard JS WebComponent Starter-kit
 
+##Demos
+
+[Counter Demo](https://stephanluis.github.io/plainjs-lhzd2doq/)
+
 ## Links
 
 - [A Brief Introduction](https://www.webcomponents.org/introduction)
